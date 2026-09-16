@@ -56,20 +56,22 @@
       gap: 8px;
     }
 
-    .banner-classes .pill {
+    .class-card {
       background: #193557;
       border: 1px solid #2a5282;
       color: #e0ecf8;
       padding: 6px 12px;
       border-radius: 6px;
+      font: inherit;
       font-size: 13px;
       font-weight: 600;
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      cursor: pointer;
     }
 
-    .banner-classes .pill-icon {
+    .class-card .class-icon {
       width: 20px;
       height: 20px;
       border: 2px solid currentColor;
@@ -81,12 +83,65 @@
       line-height: 1;
     }
 
-    .banner-classes .present { color: #86efac; }
-    .banner-classes .missing { color: #fca5a5; }
-    .banner-classes .misaligned { color: #7dd3fc; }
+    .class-card:hover { background: #23466f; }
+    .class-card.present { color: #86efac; }
+    .class-card.missing { color: #fca5a5; }
+    .class-card.misaligned { color: #7dd3fc; }
+    .class-card.missing .class-icon { border-radius: 4px; }
+    .class-card.misaligned .class-icon { border-style: dashed; }
 
-    .banner-classes .missing .pill-icon { border-radius: 4px; }
-    .banner-classes .misaligned .pill-icon { border-style: dashed; }
+    .class-image-dialog {
+      width: min(92vw, 560px);
+      margin: 18px auto auto;
+      padding: 0;
+      overflow: hidden;
+      border: 2px solid #38bdf8;
+      border-radius: 10px;
+      background: #ffffff;
+      color: #102a46;
+      box-shadow: 0 18px 60px rgb(2 15 32 / 45%);
+    }
+
+    .class-image-dialog::backdrop { background: rgb(2 15 32 / 72%); }
+
+    .class-dialog-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      background: #102a46;
+      color: #ffffff;
+    }
+
+    .class-dialog-header h2 { margin: 0; font-size: 18px; }
+
+    .class-dialog-close {
+      border: 1px solid #7dd3fc;
+      border-radius: 5px;
+      background: transparent;
+      color: #ffffff;
+      padding: 5px 9px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .class-dialog-content { margin: 0; padding: 12px; }
+    .class-dialog-content img {
+      display: block;
+      width: 100%;
+      max-height: 58vh;
+      object-fit: contain;
+      background: #f8fafc;
+      border-radius: 6px;
+    }
+    .class-dialog-content figcaption {
+      margin-top: 8px;
+      font-size: 14px;
+      line-height: 1.45;
+      text-align: center;
+    }
 
     /* 3-Column Grid Layout */
     .poster-grid {
@@ -928,6 +983,10 @@
         align-items: flex-start;
         gap: 12px;
       }
+      .banner-classes {
+        width: 100%;
+        flex-wrap: wrap;
+      }
       .simulation-toolbar {
         align-items: stretch;
         flex-direction: column;
@@ -1012,12 +1071,23 @@
         <h1>Adaptive Edge AI Bottle-Label Inspection</h1>
         <p class="lede">AI checks bottle labels locally and uses cloud support only when needed.</p>
       </div>
-      <div class="banner-classes" aria-label="Inspection classes">
-        <span class="pill present"><span class="pill-icon" aria-hidden="true">✓</span><span>Label present</span></span>
-        <span class="pill missing"><span class="pill-icon" aria-hidden="true">!</span><span>Label missing</span></span>
-        <span class="pill misaligned"><span class="pill-icon" aria-hidden="true">↗</span><span>Label misaligned</span></span>
+      <div class="banner-classes" aria-label="Inspection class examples">
+        <button class="class-card present" type="button" data-class-image="label-present.png" data-class-name="Label present" data-class-description="Bottle with a complete label positioned correctly at its centre."><span class="class-icon" aria-hidden="true">✓</span><span>Label present</span></button>
+        <button class="class-card missing" type="button" data-class-image="label-missing.png" data-class-name="Label missing" data-class-description="Bottle with no label in the expected label area."><span class="class-icon" aria-hidden="true">!</span><span>Label missing</span></button>
+        <button class="class-card misaligned" type="button" data-class-image="label-misaligned.png" data-class-name="Label misaligned" data-class-description="Bottle with its label visibly tilted away from the correct position."><span class="class-icon" aria-hidden="true">↗</span><span>Label misaligned</span></button>
       </div>
     </header>
+
+    <dialog id="classImageDialog" class="class-image-dialog" aria-labelledby="classDialogTitle" aria-describedby="classDialogCaption">
+      <div class="class-dialog-header">
+        <h2 id="classDialogTitle">Inspection class</h2>
+        <button id="classDialogClose" class="class-dialog-close" type="button" aria-label="Close class image">Close</button>
+      </div>
+      <figure class="class-dialog-content">
+        <img id="classDialogImage" src="label-present.svg" alt="">
+        <figcaption id="classDialogCaption"></figcaption>
+      </figure>
+    </dialog>
 
     <section id="architectureSection" class="poster-card architecture-card">
       <div class="card-header flex-header">
@@ -1333,6 +1403,30 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // Class buttons open an accessible image overlay at the top of the page.
+      const classDialog = document.getElementById('classImageDialog');
+      const classDialogImage = document.getElementById('classDialogImage');
+      const classDialogTitle = document.getElementById('classDialogTitle');
+      const classDialogCaption = document.getElementById('classDialogCaption');
+      const classDialogClose = document.getElementById('classDialogClose');
+
+      document.querySelectorAll('.class-card[data-class-image]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const name = button.dataset.className;
+          const description = button.dataset.classDescription;
+          classDialogTitle.textContent = name;
+          classDialogImage.src = button.dataset.classImage;
+          classDialogImage.alt = description;
+          classDialogCaption.textContent = description;
+          classDialog.showModal();
+        });
+      });
+
+      classDialogClose.addEventListener('click', () => classDialog.close());
+      classDialog.addEventListener('click', (event) => {
+        if (event.target === classDialog) classDialog.close();
+      });
+
       // 1. Main Accordion Toggles
       const cardHeaders = document.querySelectorAll('.card-header');
       cardHeaders.forEach((header, index) => {
