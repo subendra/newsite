@@ -90,6 +90,37 @@
     .class-card.missing .class-icon { border-radius: 4px; }
     .class-card.misaligned .class-icon { border-style: dashed; }
 
+    .view-controls {
+      display: flex;
+      justify-content: flex-end;
+      gap: 7px;
+      margin: 0 0 8px;
+    }
+
+    .view-button {
+      min-height: 34px;
+      padding: 6px 12px;
+      border: 1px solid #0b6288;
+      border-radius: 7px;
+      background: #ffffff;
+      color: #0b4462;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    .view-button.active {
+      background: #0b6288;
+      color: #ffffff;
+      box-shadow: 0 4px 10px rgb(11 98 136 / 20%);
+    }
+
+    .view-button:focus-visible {
+      outline: 3px solid #f59e0b;
+      outline-offset: 3px;
+    }
+
     .class-image-dialog {
       width: min(92vw, 560px);
       margin: 18px auto auto;
@@ -200,6 +231,8 @@
     }
 
     .card-header {
+      width: 100%;
+      border: 0;
       background: #102742;
       color: #ffffff;
       padding: 10px 14px;
@@ -207,6 +240,8 @@
       font-size: 15px;
       letter-spacing: 0.02em;
       cursor: pointer;
+      font-family: inherit;
+      text-align: left;
     }
 
     .card-header.flex-header {
@@ -222,6 +257,8 @@
       font: inherit;
     }
 
+    .accordion-heading { margin: 0; }
+
     /* Accordion Expand/Collapse Animation */
     .card-body {
       padding: 12px 14px;
@@ -231,6 +268,15 @@
       max-height: 1200px;
       opacity: 1;
       transition: max-height 0.4s cubic-bezier(0, 1, 0, 1), opacity 0.3s ease, padding 0.3s ease;
+    }
+
+    .card-body.revealing {
+      animation: revealSection 300ms ease-out both;
+    }
+
+    @keyframes revealSection {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .poster-card.collapsed .card-body {
@@ -257,6 +303,8 @@
     }
 
     .sub-header {
+      width: 100%;
+      border: 0;
       background: #1e3a5f;
       color: #ffffff;
       padding: 8px 12px;
@@ -266,6 +314,8 @@
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
+      font-family: inherit;
+      text-align: left;
     }
 
     .sub-body {
@@ -320,8 +370,8 @@
       line-height: 1;
     }
 
-    .poster-card:not(.collapsed) > .card-header .arrow-icon,
-    .sub-card:not(.collapsed) > .sub-header .arrow-icon {
+    .poster-card:not(.collapsed) > .accordion-heading .arrow-icon,
+    .sub-card:not(.collapsed) > .accordion-heading .arrow-icon {
       transform: rotate(180deg);
     }
 
@@ -452,7 +502,7 @@
       box-shadow: 0 10px 28px rgba(2, 20, 38, 0.25);
     }
 
-    .architecture-card > .card-header {
+    .architecture-card > .accordion-heading .card-header {
       background: linear-gradient(100deg, #0b2a45 0%, #0c5272 100%);
       padding: 8px 12px;
       font-size: 15px;
@@ -516,6 +566,9 @@
     }
 
     .simulation-button:focus-visible,
+    .class-card:focus-visible,
+    .class-dialog-close:focus-visible,
+    .demo-url:focus-visible,
     .card-header:focus-visible,
     .sub-header:focus-visible,
     .mode-tab:focus-visible,
@@ -526,6 +579,8 @@
       outline: 3px solid #f59e0b;
       outline-offset: 3px;
     }
+
+    [hidden] { display: none !important; }
 
     .simulation-button:disabled {
       cursor: not-allowed;
@@ -548,7 +603,7 @@
       height: 48px;
       flex: 0 0 48px;
       border-radius: 50%;
-      background: conic-gradient(#f97316 var(--cpu), #cfe0ea 0);
+      background: conic-gradient(#c2410c var(--cpu), #cfe0ea 0);
       display: grid;
       place-items: center;
       position: relative;
@@ -590,7 +645,7 @@
       width: 0;
       height: 100%;
       border-radius: inherit;
-      background: #f97316;
+      background: #c2410c;
     }
 
     .architecture-canvas {
@@ -637,6 +692,21 @@
       animation-play-state: paused;
     }
 
+    .architecture-canvas.intro-animation {
+      animation: architecturePan 2.6s ease-out both;
+      transform-origin: center;
+    }
+
+    .architecture-canvas.intro-animation.paused {
+      animation-play-state: paused;
+    }
+
+    @keyframes architecturePan {
+      0% { opacity: 0; transform: scale(0.96) translateX(-2%); }
+      55% { opacity: 1; transform: scale(1.02) translateX(2%); }
+      100% { opacity: 1; transform: scale(1) translateX(0); }
+    }
+
     .node-camera { left: 0.2%; top: 31.5%; width: 11.3%; height: 15.1%; }
     .node-pi { left: 20.5%; top: 32.2%; width: 13%; height: 14.2%; }
     .node-processing { left: 32.1%; top: 34.8%; width: 13.7%; height: 9%; }
@@ -646,6 +716,29 @@
     .node-cloud { left: 77.8%; top: 32%; width: 20.4%; height: 14.3%; }
     .node-flask { left: 60%; top: 81.4%; width: 15%; height: 16.6%; }
     .node-results { left: 83.8%; top: 81%; width: 13.5%; height: 18.4%; }
+
+    .future-camera-label {
+      position: absolute;
+      z-index: 3;
+      pointer-events: none;
+      text-align: center;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .future-camera-label {
+      left: 0.7%;
+      width: 10.7%;
+      padding: 2px 1px;
+      background: rgb(255 255 255 / 92%);
+      color: #475569;
+      border: 1px dashed #64748b;
+      border-radius: 3px;
+      font-size: clamp(6px, 0.62vw, 9px);
+    }
+
+    .future-camera-one { top: 66.5%; }
+    .future-camera-many { top: 87.3%; }
 
     @keyframes nodePulse {
       from { filter: brightness(0.95); }
@@ -711,6 +804,13 @@
       margin: 4px 2px 0;
       color: #536b7b;
       font-size: 12px;
+    }
+
+    .simulation-disclaimer {
+      margin: 5px 2px 0;
+      color: #334155;
+      font-size: 12px;
+      line-height: 1.35;
     }
 
     .simulation-readout {
@@ -798,8 +898,17 @@
     }
 
     .metric-card {
-      min-height: 65px;
+      height: 120px;
+      min-height: 120px;
       transition: transform 0.25s ease;
+    }
+
+    .metric-card .flip-back {
+      box-sizing: border-box;
+      overflow: auto;
+      padding: 9px;
+      font-size: 12px;
+      line-height: 1.35;
     }
 
     .metric-card:hover {
@@ -825,7 +934,7 @@
 
     .metric-front span {
       font-size: 13px;
-      color: #64748b;
+      color: #475569;
     }
 
     /* Matrix Frame and Flip */
@@ -858,7 +967,7 @@
 
     .matrix-caption {
       font-size: 13px;
-      color: #64748b;
+      color: #475569;
       margin-top: 6px;
       text-align: center;
       font-style: italic;
@@ -906,7 +1015,7 @@
 
     .metric-inline-grid div span {
       font-size: 13px;
-      color: #64748b;
+      color: #475569;
     }
 
     .next-grid {
@@ -974,6 +1083,16 @@
       overflow-wrap: anywhere;
     }
 
+    .results-caution {
+      margin: 8px 0 0;
+      padding: 7px 9px;
+      border-left: 3px solid #c2410c;
+      background: #fff7ed;
+      color: #7c2d12;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
     @media (max-width: 900px) {
       .poster-grid {
         grid-template-columns: 1fr;
@@ -1018,8 +1137,7 @@
     }
 
     @media (min-width: 901px) and (max-height: 720px) {
-      .poster-banner .lede,
-      .simulation-caption {
+      .poster-banner .lede {
         display: none;
       }
       .poster-banner {
@@ -1078,22 +1196,27 @@
       </div>
     </header>
 
+    <nav class="view-controls" aria-label="Poster reading mode">
+      <button id="focusModeBtn" class="view-button active" type="button" aria-pressed="true">Focus mode</button>
+      <button id="readAllBtn" class="view-button" type="button" aria-pressed="false">Read all</button>
+    </nav>
+
     <dialog id="classImageDialog" class="class-image-dialog" aria-labelledby="classDialogTitle" aria-describedby="classDialogCaption">
       <div class="class-dialog-header">
         <h2 id="classDialogTitle">Inspection class</h2>
         <button id="classDialogClose" class="class-dialog-close" type="button" aria-label="Close class image">Close</button>
       </div>
       <figure class="class-dialog-content">
-        <img id="classDialogImage" src="label-present.svg" alt="">
+        <img id="classDialogImage" src="label-present.png" alt="Bottle with a complete label positioned correctly at its centre.">
         <figcaption id="classDialogCaption"></figcaption>
       </figure>
     </dialog>
 
     <section id="architectureSection" class="poster-card architecture-card">
-      <div class="card-header flex-header">
-        <h2 class="card-title"><small class="section-kicker">Interactive demonstration</small>1. System Architecture</h2>
-        <button class="toggle-card-btn" aria-label="Toggle System Architecture section"><span class="arrow-icon">&#9660;</span></button>
-      </div>
+      <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
+        <span class="card-title"><small class="section-kicker">Interactive demonstration</small>1. System Architecture</span>
+        <span class="toggle-card-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
+      </button></h2>
       <div class="card-body">
         <div class="simulation-toolbar">
           <div class="simulation-actions" aria-label="Architecture simulation controls">
@@ -1117,6 +1240,9 @@
           <div id="architectureCanvas" class="architecture-canvas">
             <img src="system-architecture.jpg" aria-describedby="architectureCaption" alt="Flow diagram of the bottle-label inspection system. A camera sends a frame to Raspberry Pi image processing. Normal load routes the frame to local YOLO11n inference; sustained CPU load of at least 90 percent routes a Base64-encoded frame through MQTT to cloud YOLO inference. Both routes finish at the Flask dashboard and Results Log.">
 
+            <span class="future-camera-label future-camera-one" aria-hidden="true">Future scalable deployment</span>
+            <span class="future-camera-label future-camera-many" aria-hidden="true">Future scalable deployment</span>
+
             <span id="nodeCamera" class="node-highlight node-camera" aria-hidden="true"></span>
             <span id="nodePi" class="node-highlight node-pi" aria-hidden="true"></span>
             <span id="nodeProcessing" class="node-highlight node-processing" aria-hidden="true"></span>
@@ -1131,7 +1257,8 @@
             <span id="mqttToken" class="flow-token packet-token" aria-hidden="true">BASE64<br>MQTT</span>
             <span id="returnToken" class="flow-token return-token" aria-hidden="true">CLOUD<br>RESULT</span>
           </div>
-          <figcaption id="architectureCaption" class="simulation-caption">Animated system flow. Active components receive a blue outline, and both local and cloud routes finish at the Results Log. The 60-second sustained-load condition is accelerated in this demonstration.</figcaption>
+          <figcaption id="architectureCaption" class="simulation-caption">Interactive simulation of local inference and CPU-triggered MQTT cloud offloading. Timing is accelerated for demonstration. Additional IP cameras represent a future scalable deployment and were not part of the tested prototype.</figcaption>
+          <p class="simulation-disclaimer"><strong>Note:</strong> This interactive simulation replays the system workflow using recorded project measurements; it is not a live inference session.</p>
         </figure>
 
         <div class="simulation-readout" aria-live="polite" aria-atomic="false">
@@ -1144,7 +1271,7 @@
             <strong id="predictionValue">—</strong>
           </div>
           <div class="readout-cell">
-            <span>MQTT RTT</span>
+            <span>Mean measured MQTT RTT</span>
             <strong id="mqttRttValue">—</strong>
           </div>
           <div class="readout-cell">
@@ -1159,10 +1286,10 @@
       <!-- COLUMN 1 (Slides in from Left) -->
       <div class="poster-col col-left">
         <section class="poster-card collapsed">
-          <div class="card-header flex-header">
-            <h2 class="card-title">2. The Problem</h2>
-            <button class="toggle-card-btn" aria-label="Toggle section"><span class="arrow-icon">&#9660;</span></button>
-          </div>
+          <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
+            <span class="card-title">2. The Problem</span>
+            <span class="toggle-card-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
+          </button></h2>
           <div class="card-body">
             <div class="problem-list">
               <div class="prob-item">
@@ -1179,10 +1306,10 @@
         </section>
 
         <section class="poster-card collapsed">
-          <div class="card-header flex-header">
-            <h2 class="card-title">3. How the System Works</h2>
-            <button class="toggle-card-btn" aria-label="Toggle section"><span class="arrow-icon">&#9660;</span></button>
-          </div>
+          <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
+            <span class="card-title">3. How the System Works</span>
+            <span class="toggle-card-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
+          </button></h2>
           <div class="card-body">
             <div class="solution-switcher">
               <div class="switch-tabs" role="tablist">
@@ -1199,10 +1326,10 @@
         </section>
 
         <section class="poster-card collapsed">
-          <div class="card-header flex-header">
-            <h2 class="card-title">4. Why It Matters</h2>
-            <button class="toggle-card-btn" aria-label="Toggle section"><span class="arrow-icon">&#9660;</span></button>
-          </div>
+          <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
+            <span class="card-title">4. Why It Matters</span>
+            <span class="toggle-card-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
+          </button></h2>
           <div class="card-body">
             <div class="bullet-box">
               <ul class="bullet-list">
@@ -1218,10 +1345,10 @@
       <!-- COLUMN 2 (Slides in from Bottom) -->
       <div class="poster-col col-middle">
         <section class="poster-card collapsed">
-          <div class="card-header flex-header">
-            <h2 class="card-title">5. CDIO Development Process</h2>
-            <button class="toggle-card-btn" aria-label="Toggle section"><span class="arrow-icon">&#9660;</span></button>
-          </div>
+          <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
+            <span class="card-title">5. CDIO Development Process</span>
+            <span class="toggle-card-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
+          </button></h2>
           <div class="card-body">
             <div class="solution-switcher">
               <div class="process-tabs" role="tablist">
@@ -1247,17 +1374,17 @@
       <div class="poster-col col-right">
 
         <section class="poster-card collapsed">
-          <div class="card-header flex-header">
-            <h2 class="card-title">6. Measured Results</h2>
-            <button class="toggle-card-btn" aria-label="Toggle section"><span class="arrow-icon">&#9660;</span></button>
-          </div>
+          <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
+            <span class="card-title">6. Measured Results</span>
+            <span class="toggle-card-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
+          </button></h2>
           <div class="card-body">
             <!-- Sub-section: Model Performance -->
-            <div class="sub-card collapsed">
-              <div class="sub-header">
-                <h3 class="sub-title">6.1 Model Performance</h3>
-                <button class="toggle-sub-btn" aria-label="Toggle sub-section"><span class="arrow-icon">&#9660;</span></button>
-              </div>
+            <div class="sub-card">
+              <h3 class="accordion-heading"><button class="sub-header" type="button">
+                <span class="sub-title">6.1 Model Performance</span>
+                <span class="toggle-sub-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
+              </button></h3>
               <div class="sub-body">
                 <div class="metrics-grid">
                   <!-- Recall Flip Card -->
@@ -1321,6 +1448,8 @@
                   </div>
                 </div>
 
+                <p class="results-caution">Results were obtained from a controlled 46-image test set. Live performance was affected by lighting, background and bottle-position variation.</p>
+
                 <!-- Confusion Matrix Flip Card -->
                 <div class="flip-container matrix-card">
                   <div class="flip-inner">
@@ -1350,8 +1479,9 @@
               <div class="metric-sub-block">
                 <div class="metric-sub-title">Cloud Performance</div>
                 <div class="metric-inline-grid">
-                  <div><strong>538.39 ms</strong><span>MQTT RTT</span></div>
-                  <div><strong>32/32</strong><span>Cloud Res.</span></div>
+                  <div><strong>538.39 ms</strong><span>MQTT round-trip time</span></div>
+                  <div><strong>32/32</strong><span>Successful cloud responses</span></div>
+                  <div><strong>14.78 KB</strong><span>Mean payload</span></div>
                 </div>
               </div>
             </div>
@@ -1359,10 +1489,10 @@
         </section>
 
         <section class="poster-card collapsed">
-          <div class="card-header flex-header">
-            <h2 class="card-title">7. Limits &amp; Next Steps</h2>
-            <button class="toggle-card-btn" aria-label="Toggle section"><span class="arrow-icon">&#9660;</span></button>
-          </div>
+          <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
+            <span class="card-title">7. Limits &amp; Next Steps</span>
+            <span class="toggle-card-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
+          </button></h2>
           <div class="card-body">
             <div class="next-grid">
               <article><span>01</span><p style="margin:2px 0 0;">Expand dataset across lighting and positions.</p></article>
@@ -1373,10 +1503,10 @@
         </section>
 
         <section class="poster-card collapsed">
-          <div class="card-header flex-header">
-            <h2 class="card-title">8. References</h2>
-            <button class="toggle-card-btn" aria-label="Toggle section"><span class="arrow-icon">&#9660;</span></button>
-          </div>
+          <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
+            <span class="card-title">8. References</span>
+            <span class="toggle-card-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
+          </button></h2>
           <div class="card-body">
             <div class="references-box">
               <ol class="references-list">
@@ -1396,8 +1526,8 @@
     <span>Adaptive Edge AI Bottle-Label Inspection</span>
     <span>Project measurements, diagrams and inspection images: author-generated.</span>
     <div class="demo-access">
-      <span class="qr-placeholder" role="img" aria-label="Placeholder for the final demonstration QR code">QR</span>
-      <span><strong>Demonstration</strong><span class="demo-url">Demo URL: [replace with final public URL]</span></span>
+      <span class="qr-placeholder" role="img" aria-label="Reserved position for a QR code linking to the interactive demonstration">Add QR</span>
+      <span><strong>Interactive demonstration</strong><a class="demo-url" href="https://subendra.github.io/newsite/">https://subendra.github.io/newsite/</a></span>
     </div>
   </footer>
 
@@ -1429,67 +1559,100 @@
 
       // 1. Main Accordion Toggles
       const cardHeaders = document.querySelectorAll('.card-header');
+      const mainAccordions = [];
+      const focusModeBtn = document.getElementById('focusModeBtn');
+      const readAllBtn = document.getElementById('readAllBtn');
+      let readAllMode = false;
       cardHeaders.forEach((header, index) => {
         const card = header.closest('.poster-card');
         const cardBody = card.querySelector(':scope > .card-body');
-        const toggleBtn = header.querySelector('.toggle-card-btn');
-        const toggleCard = () => {
-          card.classList.toggle('collapsed');
-          header.setAttribute('aria-expanded', String(!card.classList.contains('collapsed')));
+        const setCardState = (expanded, animate = false) => {
+          card.classList.toggle('collapsed', !expanded);
+          header.setAttribute('aria-expanded', String(expanded));
+          if (cardBody) {
+            cardBody.hidden = !expanded;
+            if (expanded) {
+              cardBody.removeAttribute('inert');
+              if (animate) {
+                cardBody.classList.remove('revealing');
+                void cardBody.offsetWidth;
+                cardBody.classList.add('revealing');
+              }
+            } else {
+              cardBody.setAttribute('inert', '');
+              cardBody.classList.remove('revealing');
+            }
+          }
         };
-        header.setAttribute('role', 'button');
-        header.setAttribute('tabindex', '0');
-        header.setAttribute('aria-expanded', String(!card.classList.contains('collapsed')));
+        const toggleCard = () => {
+          const expanded = card.classList.contains('collapsed');
+          if (expanded && !readAllMode) {
+            mainAccordions.forEach(item => {
+              if (item.card !== card) item.setCardState(false);
+            });
+          }
+          setCardState(expanded, expanded);
+        };
         if (cardBody) {
           cardBody.id = cardBody.id || `sectionPanel${index + 1}`;
           header.setAttribute('aria-controls', cardBody.id);
         }
-        if (toggleBtn) {
-          toggleBtn.innerHTML = '<span class="arrow-icon">&#9660;</span>';
-          toggleBtn.setAttribute('aria-hidden', 'true');
-          toggleBtn.setAttribute('tabindex', '-1');
-        }
+        mainAccordions.push({ card, setCardState });
+        setCardState(!card.classList.contains('collapsed'));
         header.addEventListener('click', toggleCard);
-        header.addEventListener('keydown', (event) => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            toggleCard();
-          }
+      });
+
+      const setReadingModeButtons = () => {
+        focusModeBtn.classList.toggle('active', !readAllMode);
+        focusModeBtn.setAttribute('aria-pressed', String(!readAllMode));
+        readAllBtn.classList.toggle('active', readAllMode);
+        readAllBtn.setAttribute('aria-pressed', String(readAllMode));
+      };
+
+      readAllBtn.addEventListener('click', () => {
+        readAllMode = true;
+        setReadingModeButtons();
+        mainAccordions.forEach(item => item.setCardState(true, true));
+      });
+
+      focusModeBtn.addEventListener('click', () => {
+        readAllMode = false;
+        setReadingModeButtons();
+        mainAccordions.forEach((item, index) => item.setCardState(index === 0, false));
+        document.getElementById('architectureSection').scrollIntoView({
+          behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+          block: 'start'
         });
       });
+
+      setReadingModeButtons();
 
       // 2. Sub-section Accordion Toggles
       const subHeaders = document.querySelectorAll('.sub-header');
       subHeaders.forEach((header, index) => {
         const subCard = header.closest('.sub-card');
         const subBody = subCard.querySelector(':scope > .sub-body');
-        const toggleBtn = header.querySelector('.toggle-sub-btn');
-        const toggleSubCard = () => {
-          subCard.classList.toggle('collapsed');
-          header.setAttribute('aria-expanded', String(!subCard.classList.contains('collapsed')));
+        const setSubCardState = (expanded) => {
+          subCard.classList.toggle('collapsed', !expanded);
+          header.setAttribute('aria-expanded', String(expanded));
+          if (subBody) {
+            subBody.hidden = !expanded;
+            if (expanded) subBody.removeAttribute('inert');
+            else subBody.setAttribute('inert', '');
+          }
         };
-        header.setAttribute('role', 'button');
-        header.setAttribute('tabindex', '0');
-        header.setAttribute('aria-expanded', String(!subCard.classList.contains('collapsed')));
+        const toggleSubCard = () => {
+          const expanded = subCard.classList.contains('collapsed');
+          setSubCardState(expanded);
+        };
         if (subBody) {
           subBody.id = subBody.id || `subsectionPanel${index + 1}`;
           header.setAttribute('aria-controls', subBody.id);
         }
-        if (toggleBtn) {
-          toggleBtn.innerHTML = '<span class="arrow-icon">&#9660;</span>';
-          toggleBtn.setAttribute('aria-hidden', 'true');
-          toggleBtn.setAttribute('tabindex', '-1');
-        }
+        setSubCardState(!subCard.classList.contains('collapsed'));
         header.addEventListener('click', (e) => {
           e.stopPropagation();
           toggleSubCard();
-        });
-        header.addEventListener('keydown', (event) => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            event.stopPropagation();
-            toggleSubCard();
-          }
         });
       });
 
@@ -1598,7 +1761,7 @@
           ]
         },
         design: {
-          title: "Design the Edge-Cloud system",
+          title: "Design the edge–cloud system",
           items: [
             "Design the edge-cloud architecture and three-class inspection flow.",
             "Design MQTT communication and payload structure.",
@@ -1609,7 +1772,7 @@
           title: "Build and integrate the prototype",
           items: [
             "Train YOLO11n for present, missing and misaligned.",
-            "Export to ncnn and deploy on Raspberry Pi 4.",
+            "Export to NCNN and deploy on Raspberry Pi 4.",
             "Integrate camera, MQTT, cloud inference and adaptive offloading."
           ]
         },
@@ -1618,7 +1781,7 @@
           items: [
             "Test Edge-only, Cloud-only and Adaptive modes.",
             "Measure detection performance, inference latency and CPU utilisation.",
-            "Evaluate MQTT RTT, payload size and offloading behaviour."
+            "Evaluate MQTT round-trip time, payload size and offloading behaviour."
           ]
         }
       };
@@ -1936,7 +2099,7 @@
         await wait(850);
 
         activateNode('nodeLocal', true);
-        predictionValue.textContent = 'label_present';
+        predictionValue.textContent = 'Label present';
         predictionValue.className = 'complete';
         setStatus('Sending local result to Flask dashboard', 'running');
         activateNode('nodeFlask');
@@ -2076,7 +2239,7 @@
         activateNode('nodeResults', true);
         mqttRttValue.textContent = '538.39 ms';
         mqttRttValue.className = 'complete';
-        predictionValue.textContent = 'label_present';
+        predictionValue.textContent = 'Label present';
         predictionValue.className = 'complete';
         finalResultValue.textContent = 'Results Log · cloud PASS';
         finalResultValue.className = 'complete';
@@ -2100,6 +2263,27 @@
           pauseAnimationBtn.title = 'Animation is minimized because reduced motion is enabled.';
         }
         resetSimulation();
+
+        // Play one restrained Canva-style introduction before enabling inspection.
+        if (!reduceMotion) {
+          runInspectionBtn.disabled = true;
+          setPauseAvailable(true);
+          architectureCanvas.classList.remove('intro-animation');
+          void architectureCanvas.offsetWidth;
+          architectureCanvas.classList.add('intro-animation');
+
+          const finishArchitectureIntro = (event) => {
+            if (event.target !== architectureCanvas || event.animationName !== 'architecturePan') return;
+            architectureCanvas.removeEventListener('animationend', finishArchitectureIntro);
+            architectureCanvas.classList.remove('intro-animation');
+            setPauseAvailable(false);
+            runInspectionBtn.disabled = false;
+            setStatus('Ready for inspection');
+          };
+          architectureCanvas.addEventListener('animationend', finishArchitectureIntro);
+        } else {
+          runInspectionBtn.disabled = false;
+        }
       }
     });
   </script>
