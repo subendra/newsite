@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Adaptive Edge AI bottle-label inspection system using Raspberry Pi, YOLO11n, MQTT and cloud offloading.">
-  <title>Adaptive Edge AI Bottle-Label Inspection</title>
+  <meta name="description" content="Smart Edge AI Quality Inspection System using Raspberry Pi, YOLO11n, MQTT and cloud offloading.">
+  <title>Smart Edge AI Quality Inspection System</title>
   <style>
     /* Global & Resets */
     * {
@@ -90,14 +90,60 @@
     .class-card.missing .class-icon { border-radius: 4px; }
     .class-card.misaligned .class-icon { border-style: dashed; }
 
-    .view-controls {
+    .view-mode-drawer {
+      position: fixed;
+      z-index: 30;
+      left: 0;
+      top: 118px;
       display: flex;
-      justify-content: flex-end;
-      gap: 7px;
-      margin: 0 0 8px;
+      align-items: stretch;
+      width: 232px;
+      transform: translateX(-188px);
+      transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+      filter: drop-shadow(0 10px 18px rgb(2 15 32 / 28%));
+    }
+
+    .view-mode-drawer.open { transform: translateX(0); }
+
+    .view-controls {
+      width: 188px;
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+      background: linear-gradient(145deg, #0b2a45, #123e62);
+      border: 1px solid #28739b;
+      border-left: 0;
+      border-radius: 0 0 10px 0;
+    }
+
+    .drawer-title {
+      color: #bae6fd;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .drawer-toggle {
+      width: 44px;
+      min-height: 58px;
+      align-self: flex-start;
+      display: grid;
+      place-items: center;
+      border: 1px solid #38bdf8;
+      border-left: 0;
+      border-radius: 0 10px 10px 0;
+      background: linear-gradient(180deg, #0ea5e9, #0369a1);
+      color: #ffffff;
+      font: inherit;
+      font-size: 28px;
+      line-height: 1;
+      cursor: pointer;
+      box-shadow: 4px 5px 14px rgb(3 105 161 / 28%);
     }
 
     .view-button {
+      width: 100%;
       min-height: 34px;
       padding: 6px 12px;
       border: 1px solid #0b6288;
@@ -119,6 +165,50 @@
     .view-button:focus-visible {
       outline: 3px solid #f59e0b;
       outline-offset: 3px;
+    }
+
+    .drawer-toggle:focus-visible {
+      outline: 3px solid #f59e0b;
+      outline-offset: 3px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .component-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .component-group {
+      padding: 9px;
+      border: 1px solid #bdd5e3;
+      border-radius: 7px;
+      background: #f5faff;
+    }
+
+    .component-group h3 {
+      margin: 0 0 6px;
+      color: #0b5272;
+      font-size: 14px;
+    }
+
+    .component-group ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #263f52;
+      font-size: 13px;
+      line-height: 1.4;
     }
 
     .class-image-dialog {
@@ -964,13 +1054,23 @@
       display: block;
       border-radius: 4px;
     }
-
+/*
     .matrix-caption {
       font-size: 13px;
       color: #475569;
       margin-top: 6px;
       text-align: center;
       font-style: italic;
+    }
+*/
+    .matrix-caption {
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: normal;
+      font-style: normal;
+      color: #536b7b;
+      margin: 4px 2px 0;
+      text-align: left;
     }
 
     .matrix-back {
@@ -1064,12 +1164,13 @@
       color: #ffffff;
     }
 
-    .qr-placeholder {
-      width: 42px;
-      height: 42px;
-      display: grid;
-      place-items: center;
-      border: 2px dashed #7dd3fc;
+    .demo-qr {
+      width: 96px;
+      height: 96px;
+      display: block;
+      object-fit: contain;
+      background: #ffffff;
+      border: 2px solid #7dd3fc;
       border-radius: 4px;
       color: #7dd3fc;
       font-size: 12px;
@@ -1094,6 +1195,8 @@
     }
 
     @media (max-width: 900px) {
+      .view-mode-drawer { top: 92px; }
+      .component-grid { grid-template-columns: 1fr; }
       .poster-grid {
         grid-template-columns: 1fr;
       }
@@ -1180,15 +1283,55 @@
         transition-duration: 0.01ms !important;
       }
     }
+
+    /* Header: title and subtitle, top-right demo, then class buttons. */
+    .poster-banner {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 96px;
+      gap: 8px 16px;
+      align-items: center;
+    }
+    .banner-heading { min-width: 0; }
+    .poster-banner h1 {
+      white-space: nowrap;
+      font-size: clamp(19px, 2.2vw, 32px);
+      line-height: 1.2;
+    }
+    .poster-banner .lede {
+      display: block;
+      color: #c2d7e9;
+      line-height: 1.4;
+      margin-top: 6px;
+    }
+    .banner-demo { margin: 0; justify-self: end; text-align: center; }
+    .banner-demo figcaption { margin-top: 4px; font-size: 13px; color: #e2edf7; }
+    .poster-banner .banner-classes {
+      grid-column: 1 / -1;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+    @media (max-width: 760px) {
+      .poster-banner h1 { white-space: normal; font-size: 24px; }
+      .poster-banner .banner-classes { justify-content: flex-start; }
+    }
+    @media (max-width: 400px) {
+      .poster-banner { gap: 10px; padding: 10px; }
+      .poster-banner h1 { font-size: 20px; }
+    }
   </style>
 </head>
 <body>
   <main id="top" class="poster-container">
     <header class="poster-banner">
-      <div>
-        <h1>Adaptive Edge AI Bottle-Label Inspection</h1>
+      <div class="banner-heading">
+        <h1>Smart Edge AI Quality Inspection System</h1>
         <p class="lede">AI checks bottle labels locally and uses cloud support only when needed.</p>
       </div>
+      <figure class="banner-demo">
+        <img class="demo-qr" src="demo-qr-youtube.png" alt="QR code linking to the project demonstration video">
+        <figcaption>Project demo</figcaption>
+      </figure>
       <div class="banner-classes" aria-label="Inspection class examples">
         <button class="class-card present" type="button" data-class-image="label-present.png" data-class-name="Label present" data-class-description="Bottle with a complete label positioned correctly at its centre."><span class="class-icon" aria-hidden="true">✓</span><span>Label present</span></button>
         <button class="class-card missing" type="button" data-class-image="label-missing.png" data-class-name="Label missing" data-class-description="Bottle with no label in the expected label area."><span class="class-icon" aria-hidden="true">!</span><span>Label missing</span></button>
@@ -1196,10 +1339,17 @@
       </div>
     </header>
 
-    <nav class="view-controls" aria-label="Poster reading mode">
-      <button id="focusModeBtn" class="view-button active" type="button" aria-pressed="true">Focus mode</button>
-      <button id="readAllBtn" class="view-button" type="button" aria-pressed="false">Read all</button>
-    </nav>
+    <aside id="viewModeDrawer" class="view-mode-drawer" aria-label="Poster reading controls">
+      <div id="viewModePanel" class="view-controls" aria-hidden="true" inert>
+        <span class="drawer-title">Reading mode</span>
+        <button id="focusModeBtn" class="view-button active" type="button" aria-pressed="true">Focus mode</button>
+        <button id="readAllBtn" class="view-button" type="button" aria-pressed="false">Read all</button>
+      </div>
+      <button id="viewModeToggle" class="drawer-toggle" type="button" aria-controls="viewModePanel" aria-expanded="false">
+        <span id="viewModeChevron" aria-hidden="true">›</span>
+        <span class="sr-only">Open reading-mode controls</span>
+      </button>
+    </aside>
 
     <dialog id="classImageDialog" class="class-image-dialog" aria-labelledby="classDialogTitle" aria-describedby="classDialogCaption">
       <div class="class-dialog-header">
@@ -1214,7 +1364,7 @@
 
     <section id="architectureSection" class="poster-card architecture-card">
       <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
-        <span class="card-title"><small class="section-kicker">Interactive demonstration</small>1. System Architecture</span>
+        <span class="card-title"> 1. System Architecture&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small class="section-kicker">System Workflow</small></span>
         <span class="toggle-card-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
       </button></h2>
       <div class="card-body">
@@ -1257,7 +1407,7 @@
             <span id="mqttToken" class="flow-token packet-token" aria-hidden="true">BASE64<br>MQTT</span>
             <span id="returnToken" class="flow-token return-token" aria-hidden="true">CLOUD<br>RESULT</span>
           </div>
-          <figcaption id="architectureCaption" class="simulation-caption">Interactive simulation of local inference and CPU-triggered MQTT cloud offloading. Timing is accelerated for demonstration. Additional IP cameras represent a future scalable deployment and were not part of the tested prototype.</figcaption>
+          <figcaption id="architectureCaption" class="simulation-caption">Interactive simulation of local inference and CPU-triggered MQTT cloud offloading. Additional IP cameras represent a future scalable deployment and were not part of the tested prototype.</figcaption>
           <p class="simulation-disclaimer"><strong>Note:</strong> This interactive simulation replays the system workflow using recorded project measurements; it is not a live inference session.</p>
         </figure>
 
@@ -1331,12 +1481,10 @@
             <span class="toggle-card-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
           </button></h2>
           <div class="card-body">
-            <div class="bullet-box">
-              <ul class="bullet-list">
-                <li><b>Commercial:</b> Supports more consistent automated quality inspection and reduces dependence on continuous manual checking.</li>
-                <li><b>Social &amp; Safety:</b> Helps reduce the risk of products with missing or misaligned labels reaching customers.</li>
-                <li><b>Environmental &amp; Operational:</b> Selective offloading avoids sending every image to the cloud, reducing unnecessary data transmission and cloud-processing activity.</li>
-              </ul>
+            <div class="problem-list impact-list">
+              <div class="prob-item"><strong>Commercial:</strong> Supports more consistent automated quality inspection and reduces dependence on continuous manual checking.</div>
+              <div class="prob-item"><strong>Social &amp; Safety:</strong> Helps reduce the risk of products with missing or misaligned labels reaching customers.</div>
+              <div class="prob-item"><strong>Environmental &amp; Operational:</strong> Selective offloading avoids sending every image to the cloud, reducing unnecessary data transmission and cloud-processing activity.</div>
             </div>
           </div>
         </section>
@@ -1363,6 +1511,42 @@
                   <li>Define the industrial inspection problem and system requirements.</li>
                   <li>Review Edge AI, MQTT and edge–cloud offloading.</li>
                   <li>Connect technical work to quality and regulatory risk.</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="poster-card collapsed">
+          <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
+            <span class="card-title">5.1 System Design &amp; Components</span>
+            <span class="toggle-card-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
+          </button></h2>
+          <div class="card-body">
+            <div class="component-grid">
+              <article class="component-group">
+                <h3>Hardware</h3>
+                <ul>
+                  <li><strong>Raspberry Pi 4:</strong> local processing and offloading control.</li>
+                  <li><strong>CSI camera:</strong> captures frames.</li>
+                  <li><strong>Cloud service:</strong> processes offloaded frames.</li>
+                </ul>
+              </article>
+              <article class="component-group">
+                <h3>AI &amp; software</h3>
+                <ul>
+                  <li><strong>YOLO11n:</strong> detects three label conditions.</li>
+                  <li><strong>NCNN:</strong> optimises inference on Raspberry Pi.</li>
+                  <li><strong>Flask Framework:</strong> run web interface and display results.</li>
+                </ul>
+              </article>
+              <article class="component-group">
+                <h3>Communication &amp; control</h3>
+                <ul>
+                  <li><strong>MQTT QoS 0:</strong> exchanges requests and predictions.</li>
+                  <li><strong>Base64 JPEG/JSON:</strong> encodes frames in base64 format for transmission.</li>
+                  <li><strong>Adaptive rule:</strong> offloads after CPU ≥90% for 60 seconds; returns to local inference when CPU stays below 65% for 20 seconds.</li>
+                  <li><strong>TLS and authentication:</strong> protect communication channel.</li>
                 </ul>
               </article>
             </div>
@@ -1455,10 +1639,11 @@
                   <div class="flip-inner">
                     <div class="flip-front matrix-front">
                       <img id="confusionMatrixImg" src="confusion_matrix.png" aria-describedby="matrixCaption" alt="Confusion matrix comparing predicted and actual detections for label present, label missing and label misaligned classes.">
-                      <div id="matrixCaption" class="matrix-caption">Confusion matrix for the three label classes. Activate this card for a written interpretation.</div>
+                      <div id="matrixCaption" class="matrix-caption">Confusion matrix for the three label classes. <br>Click to get more info.</div>
                     </div>
                     <div class="flip-back matrix-back">
-                      Strong class separation was achieved; errors were limited to label_missing, including two background false positives, consistent with its lower precision (0.978).
+                      Errors were limited to label_missing, including two background false positives, consistent with its lower precision. Live testing occasionally misclassified present
+labels as misaligned under variation in lighting, camera position, and background, indicating limited training data size and diversity.
                     </div>
                   </div>
                 </div>
@@ -1481,7 +1666,6 @@
                 <div class="metric-inline-grid">
                   <div><strong>538.39 ms</strong><span>MQTT round-trip time</span></div>
                   <div><strong>32/32</strong><span>Successful cloud responses</span></div>
-                  <div><strong>14.78 KB</strong><span>Mean payload</span></div>
                 </div>
               </div>
             </div>
@@ -1522,14 +1706,11 @@
     </div>
   </main>
 
-  <footer>
-    <span>Adaptive Edge AI Bottle-Label Inspection</span>
-    <span>Project measurements, diagrams and inspection images: author-generated.</span>
-    <div class="demo-access">
-      <span class="qr-placeholder" role="img" aria-label="Reserved position for a QR code linking to the interactive demonstration">Add QR</span>
-      <span><strong>Interactive demonstration</strong><a class="demo-url" href="https://subendra.github.io/newsite/">https://subendra.github.io/newsite/</a></span>
-    </div>
-  </footer>
+  <!--<footer>
+    <span>Smart Edge AI Quality Inspection System</span>
+    <span></span>
+
+  </footer>-->
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -1562,6 +1743,10 @@
       const mainAccordions = [];
       const focusModeBtn = document.getElementById('focusModeBtn');
       const readAllBtn = document.getElementById('readAllBtn');
+      const viewModeDrawer = document.getElementById('viewModeDrawer');
+      const viewModePanel = document.getElementById('viewModePanel');
+      const viewModeToggle = document.getElementById('viewModeToggle');
+      const viewModeChevron = document.getElementById('viewModeChevron');
       let readAllMode = false;
       cardHeaders.forEach((header, index) => {
         const card = header.closest('.poster-card');
@@ -1609,10 +1794,38 @@
         readAllBtn.setAttribute('aria-pressed', String(readAllMode));
       };
 
+      const setDrawerState = (open, returnFocus = false) => {
+        viewModeDrawer.classList.toggle('open', open);
+        viewModeToggle.setAttribute('aria-expanded', String(open));
+        viewModeChevron.textContent = open ? '‹' : '›';
+        viewModeToggle.querySelector('.sr-only').textContent = open
+          ? 'Close reading-mode controls'
+          : 'Open reading-mode controls';
+        viewModePanel.setAttribute('aria-hidden', String(!open));
+        if (open) {
+          viewModePanel.removeAttribute('inert');
+          (readAllMode ? readAllBtn : focusModeBtn).focus();
+        } else {
+          viewModePanel.setAttribute('inert', '');
+          if (returnFocus) viewModeToggle.focus();
+        }
+      };
+
+      viewModeToggle.addEventListener('click', () => {
+        setDrawerState(!viewModeDrawer.classList.contains('open'));
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && viewModeDrawer.classList.contains('open')) {
+          setDrawerState(false, true);
+        }
+      });
+
       readAllBtn.addEventListener('click', () => {
         readAllMode = true;
         setReadingModeButtons();
         mainAccordions.forEach(item => item.setCardState(true, true));
+        setDrawerState(false, true);
       });
 
       focusModeBtn.addEventListener('click', () => {
@@ -1623,9 +1836,11 @@
           behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
           block: 'start'
         });
+        setDrawerState(false, true);
       });
 
       setReadingModeButtons();
+      setDrawerState(false);
 
       // 2. Sub-section Accordion Toggles
       const subHeaders = document.querySelectorAll('.sub-header');
@@ -1691,7 +1906,7 @@
         },
         adaptive: {
           title: "Dynamic MQTT workload offloading",
-          desc: "When edge CPU utilisation remains at or above 90% for 60 seconds, a frame is encoded as Base64 and offloaded via MQTT to the cloud inference service."
+          desc: "When edge CPU utilisation remains at or above 90% for 60 seconds, a frame is encoded as Base64 and offloaded via MQTT to the cloud inference service. Local inference resumes when CPU stays below 65% for 20 seconds."
         },
         cloud: {
           title: "High-capacity cloud inference",
