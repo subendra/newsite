@@ -1465,8 +1465,9 @@
                 <button class="mode-tab" data-mode="cloud" role="tab">Cloud</button>
               </div>
               <div id="modePanel" class="mode-copy" role="tabpanel" tabindex="0">
-                <h4 id="modeTitle">Fast, private local inspection</h4>
-                <p id="modeDesc">YOLO11n runs in NCNN format on Raspberry Pi 4, keeping image processing close to the camera and reducing cloud dependence.</p>
+                <h4 id="modeTitle">Local inspection by default</h4>
+                <p id="modeDesc">YOLO11n is deployed using NCNN on Raspberry Pi 4. Images are processed locally to identify present,
+                  missing or misaligned labels, reducing dependence on cloud processing.</p>
               </div>
             </div>
           </div>
@@ -1481,7 +1482,7 @@
             <div class="problem-list impact-list">
               <div class="prob-item"><strong>Commercial:</strong> Supports more consistent automated quality inspection and reduces dependence on continuous manual checking.</div>
               <div class="prob-item"><strong>Social &amp; Safety:</strong> Helps reduce the risk of products with missing or misaligned labels reaching customers.</div>
-              <div class="prob-item"><strong>Environmental &amp; Operational:</strong> Selective offloading avoids sending every image to the cloud, reducing unnecessary data transmission and cloud-processing activity.</div>
+              <div class="prob-item"><strong>Environmental &amp; Operational:</strong> Selective offloading avoids sending every image to the cloud and can reduce unnecessary data transmission and cloud-processing activity.</div>
             </div>
           </div>
         </section>
@@ -1516,7 +1517,7 @@
 
         <section class="poster-card collapsed">
           <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
-            <span class="card-title">5.1 System Design &amp; Components</span>
+            <span class="card-title">6. System Design &amp; Components</span>
             <span class="toggle-card-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
           </button></h2>
           <div class="card-body">
@@ -1524,26 +1525,26 @@
               <article class="component-group">
                 <h3>Hardware</h3>
                 <ul>
-                  <li><strong>Raspberry Pi 4:</strong> local processing and offloading control.</li>
-                  <li><strong>CSI camera:</strong> captures frames.</li>
-                  <li><strong>Cloud service:</strong> processes offloaded frames.</li>
+                  <li><strong>Raspberry Pi 4:</strong> performs local processing and control adaptive offloading.</li>
+                  <li><strong>CSI camera:</strong> captures images for inspection.</li>
+                  <li><strong>Cloud service:</strong> processes images when inference is offloaded.</li>
                 </ul>
               </article>
               <article class="component-group">
                 <h3>AI &amp; software</h3>
                 <ul>
                   <li><strong>YOLO11n:</strong> detects three label conditions.</li>
-                  <li><strong>NCNN:</strong> optimises inference on Raspberry Pi.</li>
-                  <li><strong>Flask Framework:</strong> run web interface and display results.</li>
+                  <li><strong>ncnn:</strong> enables optimised inference on Raspberry Pi.</li>
+                  <li><strong>Flask Framework:</strong> provides the web interface for displaying inspection results and system status.</li>
                 </ul>
               </article>
               <article class="component-group">
                 <h3>Communication &amp; control</h3>
                 <ul>
-                  <li><strong>MQTT QoS 0:</strong> exchanges requests and predictions.</li>
-                  <li><strong>Base64 JPEG/JSON:</strong> encodes frames in base64 format for transmission.</li>
-                  <li><strong>Adaptive rule:</strong> offloads after CPU ≥90% for 60 seconds; returns to local inference when CPU stays below 65% for 20 seconds.</li>
-                  <li><strong>TLS and authentication:</strong> protect communication channel.</li>
+                  <li><strong>MQTT QoS 0:</strong> exchanges offloading requests and detection results.</li>
+                  <li><strong>Base64 JPEG/JSON:</strong> JPEG images are Base64-encoded with JSON messages for transmission.</li>
+                  <li><strong>Adaptive rule:</strong> offloads when CPU utilisation ≥90% for 60 seconds and returns to local inference when CPU remains below 65% for 20 seconds.</li>
+                  <li><strong>TLS and authentication:</strong> protect communication channel between edge and cloud.</li>
                 </ul>
               </article>
             </div>
@@ -1556,14 +1557,14 @@
 
         <section class="poster-card collapsed">
           <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
-            <span class="card-title">6. Measured Results</span>
+            <span class="card-title">7. Measured Results</span>
             <span class="toggle-card-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
           </button></h2>
           <div class="card-body">
             <!-- sub-heading Model Performance -->
             <div class="sub-card">
               <h3 class="accordion-heading"><button class="sub-header" type="button">
-                <span class="sub-title">6.1 Model Performance</span>
+                <span class="sub-title">7.1 Model Performance</span>
                 <span class="toggle-sub-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
               </button></h3>
               <div class="sub-body">
@@ -1671,21 +1672,21 @@ labels as misaligned under variation in lighting, camera position, and backgroun
 
         <section class="poster-card collapsed">
           <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
-            <span class="card-title">7. Limits &amp; Next Steps</span>
+            <span class="card-title">8. Limits &amp; Next Steps</span>
             <span class="toggle-card-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
           </button></h2>
           <div class="card-body">
             <div class="next-grid">
-              <article><span>01</span><p style="margin:2px 0 0;">Expand dataset across lighting and positions.</p></article>
-              <article><span>02</span><p style="margin:2px 0 0;">Test on a conveyor with automated rejection.</p></article>
-              <article><span>03</span><p style="margin:2px 0 0;">Evaluate offloading using CPU, latency and network conditions.</p></article>
+              <article><span><b>01. Dataset diversity</b></span><p style="margin:2px 0 0;">Limited variation in lighting and bottle position.<br><b>Next:</b> Expand the dataset across different conditions.</p></article>
+              <article><span><b>02. Prototype environment</b></span><p style="margin:2px 0 0;">Testing was performed as a prototype rather than on a production environment.<br><b>Next:</b> Evaluate on a conveyor with automated rejection.</p></article>
+              <article><span><b>03. Offloading logic</b></span><p style="margin:2px 0 0;">The current rule is based mainly on CPU utilisation only. <br><b>Next:</b> Evaluate offloading using CPU, latency and network conditions.</p></article>
             </div>
           </div>
         </section>
 
         <section class="poster-card collapsed">
           <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
-            <span class="card-title">8. References</span>
+            <span class="card-title">9. References</span>
             <span class="toggle-card-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
           </button></h2>
           <div class="card-body">
@@ -1896,16 +1897,17 @@ labels as misaligned under variation in lighting, camera position, and backgroun
 
       const modeData = {
         edge: {
-          title: "Fast, private local inspection",
-          desc: "YOLO11n runs in NCNN format on Raspberry Pi 4, keeping image processing close to the camera and reducing cloud dependence."
+          title: "Local inspection by default",
+          desc: "YOLO11n is deployed using NCNN on Raspberry Pi 4. Images are processed locally to identify present,\n" +
+                  "missing or misaligned labels, reducing dependence on cloud processing."
         },
         adaptive: {
-          title: "Dynamic MQTT workload offloading",
+          title: "Adaptive edge-cloud offloading",
           desc: "When edge CPU utilisation remains at or above 90% for 60 seconds, a frame is encoded as Base64 and offloaded via MQTT to the cloud inference service. Local inference resumes when CPU stays below 65% for 20 seconds."
         },
         cloud: {
-          title: "High-capacity cloud inference",
-          desc: "The MQTT broker transports the request; the cloud inference service processes the image and returns the prediction for display."
+          title: "Cloud inference via MQTT",
+          desc: "The MQTT broker transports the offloading request to the cloud inference service, where image is processed. The prediction is then returned to the Raspberry Pi and displayed on the web interface."
         }
       };
 
@@ -1974,15 +1976,15 @@ labels as misaligned under variation in lighting, camera position, and backgroun
           items: [
             "Design the edge-cloud architecture and three-class inspection flow.",
             "Design MQTT communication and payload structure.",
-            "Establish CPU-based rules for local and cloud execution."
+            "Establish CPU-based rules for switching local and cloud inference."
           ]
         },
         implement: {
           title: "Build and integrate the prototype",
           items: [
-            "Train YOLO11n for present, missing and misaligned.",
-            "Export to NCNN and deploy on Raspberry Pi 4.",
-            "Integrate camera, MQTT, cloud inference and adaptive offloading."
+            "Train YOLO11n for present, missing and misaligned label conditions.",
+            "Export the model to ncnn format and deploy it on Raspberry Pi 4.",
+            "Integrate the camera, MQTT, cloud inference, adaptive offloading and flask monitoring interface."
           ]
         },
         operate: {
