@@ -6,7 +6,7 @@
   <meta name="description" content="Smart Edge AI Quality Inspection System using Raspberry Pi, YOLO11n, MQTT and cloud offloading.">
   <title>Smart Edge AI Quality Inspection System</title>
   <style>
-    /* Global & Resets */
+
     * {
       box-sizing: border-box;
     }
@@ -25,7 +25,7 @@
       padding: 0 12px;
     }
 
-    /* Header Banner */
+    /* Header*/
     .poster-banner {
       background: #0f253f;
       border: 2px solid #1d3b61;
@@ -264,7 +264,6 @@
       text-align: center;
     }
 
-    /* 3-Column Grid Layout */
     .poster-grid {
       display: grid;
       grid-template-columns: 1fr 1.2fr 0.9fr;
@@ -311,7 +310,6 @@
       to { opacity: 1; transform: translateX(0); }
     }
 
-    /* Card Containers */
     .poster-card {
       background: #ffffff;
       border: 2px solid #122842;
@@ -349,7 +347,7 @@
 
     .accordion-heading { margin: 0; }
 
-    /* Accordion Expand/Collapse Animation */
+
     .card-body {
       padding: 12px 14px;
       font-size: 14px;
@@ -377,7 +375,7 @@
       overflow: hidden;
     }
 
-    /* Sub-section Header Styling */
+
     .sub-card {
       border: 1px solid #cbd5e1;
       border-radius: 6px;
@@ -423,7 +421,7 @@
       overflow: hidden;
     }
 
-    /* Arrow Toggle Button Styling */
+
     .toggle-card-btn, .toggle-sub-btn {
       background: #193557;
       border: 1px solid #2a5282;
@@ -465,7 +463,7 @@
       transform: rotate(180deg);
     }
 
-    /* Light-Blue Box Containers with Hover Lift */
+
     .problem-list {
       display: flex;
       flex-direction: column;
@@ -1079,7 +1077,7 @@
       border-left: 3px solid #38bdf8;
     }
 
-    /* System Performance Light Blue Blocks */
+
     .system-metrics-group {
       margin-top: 10px;
       display: flex;
@@ -1283,7 +1281,7 @@
       }
     }
 
-    /* Header: title and subtitle, top-right demo, then class buttons. */
+    /* header section */
     .poster-banner {
       display: grid;
       grid-template-columns: minmax(0, 1fr) 96px;
@@ -1432,7 +1430,7 @@
     </section>
 
     <div class="poster-grid">
-      <!-- COLUMN 1 (Slides in from Left) -->
+      <!--This section belongs to COLUMN 1-->
       <div class="poster-col col-left">
         <section class="poster-card collapsed">
           <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
@@ -1489,7 +1487,7 @@
         </section>
       </div>
 
-      <!-- COLUMN 2 (Slides in from Bottom) -->
+      <!-- This section belongs to COLUMN 2  -->
       <div class="poster-col col-middle">
         <section class="poster-card collapsed">
           <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
@@ -1553,7 +1551,7 @@
         </section>
       </div>
 
-      <!-- COLUMN 3 (Slides in from Right) -->
+      <!-- This section belongs to COLUMN 3  -->
       <div class="poster-col col-right">
 
         <section class="poster-card collapsed">
@@ -1562,7 +1560,7 @@
             <span class="toggle-card-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
           </button></h2>
           <div class="card-body">
-            <!-- Sub-section: Model Performance -->
+            <!-- sub-heading Model Performance -->
             <div class="sub-card">
               <h3 class="accordion-heading"><button class="sub-header" type="button">
                 <span class="sub-title">6.1 Model Performance</span>
@@ -1706,7 +1704,7 @@ labels as misaligned under variation in lighting, camera position, and backgroun
   </main>
 
   <!--<footer>
-    <span>Smart Edge AI Quality Inspection System</span>
+    <span></span>
     <span></span>
 
   </footer>-->
@@ -1841,7 +1839,7 @@ labels as misaligned under variation in lighting, camera position, and backgroun
       setReadingModeButtons();
       setDrawerState(false);
 
-      // 2. Sub-section Accordion Toggles
+
       const subHeaders = document.querySelectorAll('.sub-header');
       subHeaders.forEach((header, index) => {
         const subCard = header.closest('.sub-card');
@@ -1870,7 +1868,6 @@ labels as misaligned under variation in lighting, camera position, and backgroun
         });
       });
 
-      // 3. Flip Card Handler for Metrics and Confusion Matrix
       const flipContainers = document.querySelectorAll('.flip-container');
       flipContainers.forEach(container => {
         const visibleLabel = container.querySelector('.metric-front span, .matrix-caption');
@@ -1897,7 +1894,6 @@ labels as misaligned under variation in lighting, camera position, and backgroun
         });
       });
 
-      // 4. System Modes Tab Switcher
       const modeData = {
         edge: {
           title: "Fast, private local inspection",
@@ -1964,7 +1960,6 @@ labels as misaligned under variation in lighting, camera position, and backgroun
         activateModeTab(activeModeTab);
       }
 
-      // 5. CDIO Process Tab Switcher
       const cdioData = {
         conceive: {
           title: "Frame the inspection challenge",
@@ -2053,7 +2048,6 @@ labels as misaligned under variation in lighting, camera position, and backgroun
         activateProcessTab(activeProcessTab);
       }
 
-      // 6. Interactive architecture simulation
       const runInspectionBtn = document.getElementById('runInspectionBtn');
       const highCpuBtn = document.getElementById('highCpuBtn');
       const pauseAnimationBtn = document.getElementById('pauseAnimationBtn');
