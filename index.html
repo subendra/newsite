@@ -1300,8 +1300,19 @@
       line-height: 1.4;
       margin-top: 6px;
     }
-    .banner-demo { margin: 0; justify-self: end; text-align: center; }
-    .banner-demo figcaption { margin-top: 4px; font-size: 13px; color: #e2edf7; }
+    .banner-demo {
+      margin: 0; justify-self: end; text-align: center;
+    }
+    .banner-demo figcaption {
+      margin-top: 4px; font-size: 13px; color: #e2edf7;
+    }
+    .banner-demo figcaption a {
+      text-decoration: none;
+      color: inherit;
+    }
+    .banner-demo figcaption a:hover {
+      text-decoration: underline;
+    }
     .poster-banner .banner-classes {
       grid-column: 1 / -1;
       justify-content: flex-end;
@@ -1329,7 +1340,7 @@
         <img class="demo-qr" src="demo-qr-youtube.png" alt="QR code linking to the project demonstration video">
         <figcaption>
           <a href="https://youtu.be/Koklo5KoVdY">
-            Project demo</a>
+            Project Demo</a>
         </figcaption>
       </figure>
       <div class="banner-classes" aria-label="Inspection class examples">
