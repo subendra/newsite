@@ -935,7 +935,7 @@
     .readout-cell strong.complete { color: #15803d; }
     .readout-cell strong.warning { color: #c2410c; }
 
-    /* Flip Card Styles for Metrics and Confusion Matrix */
+
     .flip-container {
       perspective: 1000px;
       cursor: pointer;
@@ -1361,7 +1361,7 @@
 
     <section id="architectureSection" class="poster-card architecture-card">
       <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
-        <span class="card-title"> 1. System Architecture&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small class="section-kicker">System Workflow</small></span>
+        <span class="card-title">System Architecture&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small class="section-kicker">System Workflow</small></span>
         <span class="toggle-card-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
       </button></h2>
       <div class="card-body">
@@ -1434,7 +1434,7 @@
       <div class="poster-col col-left">
         <section class="poster-card collapsed">
           <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
-            <span class="card-title">2. The Problem</span>
+            <span class="card-title">1. The Problem</span>
             <span class="toggle-card-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
           </button></h2>
           <div class="card-body">
@@ -1454,7 +1454,7 @@
 
         <section class="poster-card collapsed">
           <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
-            <span class="card-title">3. How the System Works</span>
+            <span class="card-title">2. How the System Works</span>
             <span class="toggle-card-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
           </button></h2>
           <div class="card-body">
@@ -1466,7 +1466,7 @@
               </div>
               <div id="modePanel" class="mode-copy" role="tabpanel" tabindex="0">
                 <h4 id="modeTitle">Local inspection by default</h4>
-                <p id="modeDesc">YOLO11n is deployed using NCNN on Raspberry Pi 4. Images are processed locally to identify present,
+                <p id="modeDesc">YOLO11n is deployed using ncnn on Raspberry Pi 4. Images are processed locally to identify present,
                   missing or misaligned labels, reducing dependence on cloud processing.</p>
               </div>
             </div>
@@ -1475,7 +1475,7 @@
 
         <section class="poster-card collapsed">
           <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
-            <span class="card-title">4. Why It Matters</span>
+            <span class="card-title">3. Why It Matters</span>
             <span class="toggle-card-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
           </button></h2>
           <div class="card-body">
@@ -1492,7 +1492,7 @@
       <div class="poster-col col-middle">
         <section class="poster-card collapsed">
           <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
-            <span class="card-title">5. CDIO Development Process</span>
+            <span class="card-title">4. CDIO Development Process</span>
             <span class="toggle-card-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
           </button></h2>
           <div class="card-body">
@@ -1517,7 +1517,7 @@
 
         <section class="poster-card collapsed">
           <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
-            <span class="card-title">6. System Design &amp; Components</span>
+            <span class="card-title">5. System Design &amp; Components</span>
             <span class="toggle-card-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
           </button></h2>
           <div class="card-body">
@@ -1525,7 +1525,7 @@
               <article class="component-group">
                 <h3>Hardware</h3>
                 <ul>
-                  <li><strong>Raspberry Pi 4:</strong> performs local processing and control adaptive offloading.</li>
+                  <li><strong>Raspberry Pi 4:</strong> performs local processing and controls adaptive offloading.</li>
                   <li><strong>CSI camera:</strong> captures images for inspection.</li>
                   <li><strong>Cloud service:</strong> processes images when inference is offloaded.</li>
                 </ul>
@@ -1557,7 +1557,7 @@
 
         <section class="poster-card collapsed">
           <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
-            <span class="card-title">7. Measured Results</span>
+            <span class="card-title">6. Measured Results</span>
             <span class="toggle-card-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
           </button></h2>
           <div class="card-body">
@@ -1672,7 +1672,7 @@ labels as misaligned under variation in lighting, camera position, and backgroun
 
         <section class="poster-card collapsed">
           <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
-            <span class="card-title">8. Limits &amp; Next Steps</span>
+            <span class="card-title">7. Limits &amp; Next Steps</span>
             <span class="toggle-card-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
           </button></h2>
           <div class="card-body">
@@ -1686,7 +1686,7 @@ labels as misaligned under variation in lighting, camera position, and backgroun
 
         <section class="poster-card collapsed">
           <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
-            <span class="card-title">9. References</span>
+            <span class="card-title">8. References</span>
             <span class="toggle-card-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
           </button></h2>
           <div class="card-body">
@@ -1694,7 +1694,7 @@ labels as misaligned under variation in lighting, camera position, and backgroun
               <ol class="references-list">
                 <li>UK Government (2014), <em>The Food Information Regulations 2014</em>.</li>
                 <li>Kim, T.-H., et al. (2021), “Product inspection methodology via deep learning”, <em>Sensors</em>.</li>
-                <li>OASIS (2019), <em>MQTT Version 5.0</em>.</li>
+                <li>OASIS (2019), <em>MQTT Version 3.1.1</em>.</li>
                 <li>Zhao, X. et al. (2020), “Edge-cloud computation offloading”, IEEE GLOBECOM.</li>
               </ol>
             </div>
@@ -1898,7 +1898,7 @@ labels as misaligned under variation in lighting, camera position, and backgroun
       const modeData = {
         edge: {
           title: "Local inspection by default",
-          desc: "YOLO11n is deployed using NCNN on Raspberry Pi 4. Images are processed locally to identify present,\n" +
+          desc: "YOLO11n is deployed using ncnn on Raspberry Pi 4. Images are processed locally to identify present,\n" +
                   "missing or misaligned labels, reducing dependence on cloud processing."
         },
         adaptive: {
@@ -1907,7 +1907,7 @@ labels as misaligned under variation in lighting, camera position, and backgroun
         },
         cloud: {
           title: "Cloud inference via MQTT",
-          desc: "The MQTT broker transports the offloading request to the cloud inference service, where image is processed. The prediction is then returned to the Raspberry Pi and displayed on the web interface."
+          desc: "The MQTT broker transports the offloading request to the cloud inference service, where the image is processed. The prediction is then returned to the Raspberry Pi and displayed on the web interface."
         }
       };
 
@@ -1976,7 +1976,7 @@ labels as misaligned under variation in lighting, camera position, and backgroun
           items: [
             "Design the edge-cloud architecture and three-class inspection flow.",
             "Design MQTT communication and payload structure.",
-            "Establish CPU-based rules for switching local and cloud inference."
+            "Establish CPU-based rules for switching between local and cloud inference."
           ]
         },
         implement: {
