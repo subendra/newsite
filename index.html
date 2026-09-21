@@ -1327,7 +1327,10 @@
       </div>
       <figure class="banner-demo">
         <img class="demo-qr" src="demo-qr-youtube.png" alt="QR code linking to the project demonstration video">
-        <figcaption>Project demo</figcaption>
+        <figcaption>
+          <a href="https://youtu.be/Koklo5KoVdY">
+            Project demo</a>
+        </figcaption>
       </figure>
       <div class="banner-classes" aria-label="Inspection class examples">
         <button class="class-card present" type="button" data-class-image="label-present.png" data-class-name="Label present" data-class-description="Bottle with a complete label positioned correctly at its centre."><span class="class-icon" aria-hidden="true">✓</span><span>Label present</span></button>
@@ -1430,7 +1433,7 @@
     </section>
 
     <div class="poster-grid">
-      <!--This section belongs to COLUMN 1-->
+      <!--This section belongs to Column 1-->
       <div class="poster-col col-left">
         <section class="poster-card collapsed">
           <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
@@ -1488,7 +1491,7 @@
         </section>
       </div>
 
-      <!-- This section belongs to COLUMN 2  -->
+      <!-- This section belongs to Column 2  -->
       <div class="poster-col col-middle">
         <section class="poster-card collapsed">
           <h2 class="accordion-heading"><button class="card-header flex-header" type="button">
@@ -1543,7 +1546,7 @@
                 <ul>
                   <li><strong>MQTT QoS 0:</strong> exchanges offloading requests and detection results.</li>
                   <li><strong>Base64 JPEG/JSON:</strong> JPEG images are Base64-encoded with JSON messages for transmission.</li>
-                  <li><strong>Adaptive rule:</strong> offloads when CPU utilisation ≥90% for 60 seconds and returns to local inference when CPU remains below 65% for 20 seconds.</li>
+                  <li><strong>Adaptive rule:</strong> offloads when CPU utilisation remains at or above 90% for 60 seconds and returns to local inference when CPU stays at or below 65% for 20 seconds.</li>
                   <li><strong>TLS and authentication:</strong> protect communication channel between edge and cloud.</li>
                 </ul>
               </article>
@@ -1552,7 +1555,7 @@
         </section>
       </div>
 
-      <!-- This section belongs to COLUMN 3  -->
+      <!-- This section belongs to Column 3  -->
       <div class="poster-col col-right">
 
         <section class="poster-card collapsed">
@@ -1564,7 +1567,7 @@
             <!-- sub-heading Model Performance -->
             <div class="sub-card">
               <h3 class="accordion-heading"><button class="sub-header" type="button">
-                <span class="sub-title">7.1 Model Performance</span>
+                <span class="sub-title">6.1 Model Performance</span>
                 <span class="toggle-sub-btn" aria-hidden="true"><span class="arrow-icon">&#9660;</span></span>
               </button></h3>
               <div class="sub-body">
@@ -1640,8 +1643,8 @@
                       <div id="matrixCaption" class="matrix-caption">Confusion matrix for the three label classes. <br>Click to get more info.</div>
                     </div>
                     <div class="flip-back matrix-back">
-                      Errors were limited to label_missing, including two background false positives, consistent with its lower precision. Live testing occasionally misclassified present
-labels as misaligned under variation in lighting, camera position, and background, indicating limited training data size and diversity.
+                      All misaligned-label and present-label instances were correctly classified.One missing-label instance was classified as present, and two background regions were incorrectly detected as missing labels.
+                      
                     </div>
                   </div>
                 </div>
@@ -1695,7 +1698,8 @@ labels as misaligned under variation in lighting, camera position, and backgroun
                 <li>UK Government (2014), <em>The Food Information Regulations 2014</em>.</li>
                 <li>Kim, T.-H., et al. (2021), “Product inspection methodology via deep learning”, <em>Sensors</em>.</li>
                 <li>OASIS (2019), <em>MQTT Version 3.1.1</em>.</li>
-                <li>Zhao, X. et al. (2020), “Edge-cloud computation offloading”, IEEE GLOBECOM.</li>
+                <li>Zhao, X. et al. (2020), "Improving the Accuracy-Latency Trade-off of Edge-Cloud Computational Offloading
+                  for Deep Learning Services", <em>2020 IEEE Globecom Workshops</em>.</li>
               </ol>
             </div>
           </div>
@@ -1903,7 +1907,7 @@ labels as misaligned under variation in lighting, camera position, and backgroun
         },
         adaptive: {
           title: "Adaptive edge-cloud offloading",
-          desc: "When edge CPU utilisation remains at or above 90% for 60 seconds, a frame is encoded as Base64 and offloaded via MQTT to the cloud inference service. Local inference resumes when CPU stays below 65% for 20 seconds."
+          desc: "When edge CPU utilisation remains at or above 90% for 60 seconds, a frame is encoded as Base64 and offloaded via MQTT to the cloud inference service. Local inference resumes when CPU stays at or below 65% for 20 seconds."
         },
         cloud: {
           title: "Cloud inference via MQTT",
